@@ -26,16 +26,24 @@ module PhoneNumberTranslator
     end
 
     def matcher(letter)
-      case letter
-      when 'A', 'B', 'C'      then 2
-      when 'D', 'E', 'F'      then 3
-      when 'G', 'H', 'I'      then 4
-      when 'J', 'K', 'L'      then 5
-      when 'M', 'N', 'O'      then 6
-      when 'P', 'Q', 'R', 'S' then 7
-      when 'T', 'U', 'V'      then 8
-      when 'W', 'X', 'Y', 'Z' then 9
+      numberize = matcher_helper.map.with_index do |range, number|
+        range.cover?(letter) ? number + 2 : 0
       end
+
+      numberize.inject(:+)
+    end
+
+    def matcher_helper
+      [
+        ('A'..'C'),
+        ('D'..'F'),
+        ('G'..'I'),
+        ('J'..'L'),
+        ('M'..'O'),
+        ('P'..'S'),
+        ('T'..'V'),
+        ('W'..'Z')
+      ]
     end
   end
 end
