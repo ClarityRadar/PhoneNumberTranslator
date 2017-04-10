@@ -8,10 +8,16 @@ module PhoneNumberTranslator
       @letter = letter.upcase
     end
 
-    def to_s
+    def to_i
       pattern.each_with_index.inject(0) do |acc, (elem, position)|
         elem.cover?(letter) ? position + 2 : acc
       end
+    end
+
+    alias integer to_i
+
+    def to_s
+      integer.to_s
     end
 
     private
