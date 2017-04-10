@@ -1,4 +1,6 @@
 module PhoneNumberTranslator
+  # Converts a single letter into an integer as per
+  # the phone keyboard convention.
   class Matcher
     attr_reader :letter
 
