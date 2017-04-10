@@ -1,8 +1,6 @@
 module PhoneNumberTranslator
   # Translates a given word to a phone number.
   class PhoneNumber
-    attr_reader :word, :matcher, :letters
-
     def initialize(word)
       @word = word
     end
@@ -17,6 +15,8 @@ module PhoneNumberTranslator
 
     private
 
+    attr_reader :word, :matcher, :letters
+
     def to_letters
       letters.map { |letter| matcher(letter.upcase) }
     end
@@ -26,14 +26,12 @@ module PhoneNumberTranslator
     end
 
     def matcher(letter)
-      numberize = matcher_helper.map.with_index do |range, number|
-        range.cover?(letter) ? number + 2 : 0
+      pattern.each_with_index.inject(0) do |acc, (elem, position)|
+        elem.cover?(letter) ? position + 2 : acc
       end
-
-      numberize.inject(:+)
     end
 
-    def matcher_helper
+    def pattern
       [
         ('A'..'C'),
         ('D'..'F'),
