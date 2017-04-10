@@ -10,38 +10,19 @@ module PhoneNumberTranslator
     end
 
     def to_i
-      to_letters.inject('') { |acc, elem| acc + elem.to_s }.to_i
+      to_numbers.inject('') { |acc, elem| acc + elem.to_s }.to_i
     end
 
     private
 
-    attr_reader :word, :matcher, :letters
+    attr_reader :word
+
+    def to_numbers
+      to_letters.map { |letter| Matcher.new(letter).to_s }
+    end
 
     def to_letters
-      letters.map { |letter| matcher(letter.upcase) }
-    end
-
-    def letters
       @letters ||= word.split('')
-    end
-
-    def matcher(letter)
-      pattern.each_with_index.inject(0) do |acc, (elem, position)|
-        elem.cover?(letter) ? position + 2 : acc
-      end
-    end
-
-    def pattern
-      [
-        ('A'..'C'),
-        ('D'..'F'),
-        ('G'..'I'),
-        ('J'..'L'),
-        ('M'..'O'),
-        ('P'..'S'),
-        ('T'..'V'),
-        ('W'..'Z')
-      ]
     end
   end
 end
