@@ -2,6 +2,8 @@ module PhoneNumberTranslator
   # Converts a single letter into an integer as per
   # the phone keyboard convention.
   class Matcher
+    include Pattern
+
     attr_reader :letter
 
     def initialize(letter)
@@ -9,30 +11,13 @@ module PhoneNumberTranslator
     end
 
     def to_i
-      pattern.each_with_index.inject(0) do |acc, (elem, position)|
-        elem.cover?(letter) ? position + 2 : acc
-      end
+      (2..9).detect { |code| pattern(code).cover?(letter) }
     end
 
     alias integer to_i
 
     def to_s
       integer.to_s
-    end
-
-    private
-
-    def pattern
-      [
-        ('A'..'C'),
-        ('D'..'F'),
-        ('G'..'I'),
-        ('J'..'L'),
-        ('M'..'O'),
-        ('P'..'S'),
-        ('T'..'V'),
-        ('W'..'Z')
-      ]
     end
   end
 end
